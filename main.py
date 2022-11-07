@@ -27,6 +27,7 @@ while playing:
 
     screen.fill(PINK)
     player_img = pg.image.load("Red_hood_1.png")
+    player_img = pg.transform.scale(player_img, (300,320))
 
     keys = pg.key.get_pressed()
 
@@ -39,21 +40,20 @@ while playing:
     if keys[pg.K_a]:
         x -= speed
 
-    if x > 700:
-        x = 700
-    if x < 0:
-        x = 0
+    if x > 600:
+        x = 600
+    if x < -100:
+        x = -100
 
-    if y > 500:
-        y = 500
-    if y < 0:
-        y = 0
+    if y > 350:
+        y = 350
+    if y < -100:
+        y = -100
 
     
-    box = pg.Rect(x,y, 100,100)
-    pg.draw.rect(screen, WHITE, box)
+    
 
-    screen.blitt(player_img, (x,y))
+    screen.blit(player_img, (x,y))
 
 
     pg.display.update()
