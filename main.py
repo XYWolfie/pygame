@@ -58,29 +58,34 @@ while playing:
         reaper = Enemy()
         all_sprites.add(reaper)
         all_enemies.add(reaper)
+    if hits:
+        redhood.life -= 10 
+        
 
     hits = pg.sprite.spritecollide(fireball,redhood_group, True)
     
 
-    if len(all_traps) < 10:
+    if len(all_traps) < 20:
         fireball = Trap()
         all_sprites.add(fireball)
         all_traps.add(fireball)
+    if hits:
+        redhood.life -= 10 
+        
 
     hits = pg.sprite.spritecollide(spiketrap,redhood_group, True)
        
 
-    if len(all_stilltraps) < 10:
+    if len(all_stilltraps) < 20:
         spiketrap = Stilltrap()
         all_sprites.add(spiketrap)
         all_stilltraps.add(spiketrap)
+    if hits:
+        redhood.life -= 10  
        
-            
+         
 
     hits = pg.sprite.spritecollide(redhood, all_enemies, True)
-
-   
-
             
 
     text_player_hp = comic_sans30.render(str(redhood.life), False, (WHITE))

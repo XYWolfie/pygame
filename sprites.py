@@ -90,7 +90,7 @@ class Trap(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.image = fireball_img
         self.rect = self.image.get_rect()
-        self.pos = vec(500,randint(0,1100))
+        self.pos = vec(randint(500,1500),randint(0,1100))
         self.rect.center = self.pos
         self.speed = 5
 
