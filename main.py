@@ -16,20 +16,24 @@ all_sprites = pg.sprite.Group()
 all_enemies = pg.sprite.Group()
 all_traps = pg.sprite.Group()
 all_stilltraps = pg.sprite.Group()
+food = pg.sprite.Group()
 
 redhood = Player()
 redhood_group.add(redhood)
-reaper = Enemy()
-all_enemies.add(reaper)
-spiketrap = Trap()
+reaper = Liveenemy()
+Liveenemy.add(reaper)
+spiketrap = Stilltrap()
 all_stilltraps.add(spiketrap)
 fireball = Trap()
 all_traps.add(fireball)
-all_sprites.add(redhood, reaper, spiketrap, fireball)
-
+grapesoda = Food()
+food.add(grapesoda)
+all_sprites.add(redhood, reaper, spiketrap, fireball, grapesoda)
+all_enemies.add(reaper, spiketrap, fireball,)
 
 
 screen = pg.display.set_mode((WIDTH,HEIGHT))
+
 
 FPS = 120
 clock = pg.time.Clock()
@@ -47,45 +51,56 @@ while playing:
         if event.type == pg.QUIT:
             playing = False
 
+    
+    
+    
+
 
 
     screen.fill(GREEN)
 
-    hits = pg.sprite.spritecollide(reaper,redhood_group, True)
     
-
-    if len(all_enemies) < 2:
-        reaper = Enemy()
+    if len(all_enemies) < 4:
+        reaper = Liveenemy()
         all_sprites.add(reaper)
         all_enemies.add(reaper)
-    if hits:
-        redhood.life -= 10 
+
         
+ 
 
-    hits = pg.sprite.spritecollide(fireball,redhood_group, True)
-    
-
-    if len(all_traps) < 20:
+    if len(all_enemies) < 20:
         fireball = Trap()
         all_sprites.add(fireball)
         all_traps.add(fireball)
-    if hits:
-        redhood.life -= 10 
+    
         
 
-    hits = pg.sprite.spritecollide(spiketrap,redhood_group, True)
        
 
-    if len(all_stilltraps) < 20:
+    if len(all_enemies) < 20:
         spiketrap = Stilltrap()
         all_sprites.add(spiketrap)
         all_stilltraps.add(spiketrap)
-    if hits:
-        redhood.life -= 10  
-       
-         
 
+
+    
+
+    if len(Food) < 2:
+        grapesoda = food()
+        all_sprites.add(grapesoda)
+        all_stilltraps.add(grapesoda)
+        if hits:
+            redhood.life +=10
+  
+       
     hits = pg.sprite.spritecollide(redhood, all_enemies, True)
+    if hits:
+        redhood.life -=10
+
+    if redhood.life <= 0:
+        redhood.kill()
+    
+
             
 
     text_player_hp = comic_sans30.render(str(redhood.life), False, (WHITE))
