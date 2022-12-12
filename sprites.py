@@ -8,19 +8,16 @@ player_img = pg.transform.scale(player_img, (40,70))
 
 player_left_img = pg.transform.flip(player_img, True, False)
 
-DEAD1 = pg.image.load('redhood 1dead.png')
-DEAD2 = pg.image.load('redhood dead.png')
+
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self):
-        pg.sprite.Sprite.__init__(self)
+    def __init__(self, game):
+        self.groups = game.all_sprites
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
         self.current_frame = 0   
         self.last_update = 0
-        self.standing = True    
-        self.running = False
-        self.jumping = False
-        self.dead = False 
         self.image = player_img
         self.rect = self.image.get_rect()
         self.pos = vec(100,100)
@@ -29,13 +26,16 @@ class Player(pg.sprite.Sprite):
         self.hp = 500
         self.immune = False
 
+        self.projectile_speed = 5
+
         self.image_left = player_left_img
 
-        self.dead_frames = [DEAD1, DEAD2]
+
 
     def update(self):
 
-        
+        self.rect.center = self.pos
+
 
         keys =pg.key.get_pressed()
         if keys[pg.K_w]:
@@ -49,27 +49,42 @@ class Player(pg.sprite.Sprite):
             self.pos.x += self.speed
             self.image = player_left_img
 
+        self.attack_direction_x, self.attack_direction_y = 0, 0
+
+        if keys[pg.K_UP]:
+            self.attack_direction_y = -self.projectile_speed
+        if keys[pg.K_DOWN]:
+            self.attack_direction_y = self.projectile_speed
+        if keys[pg.K_LEFT]:
+            self.attack_direction_x = -self.projectile_speed            
+        if keys[pg.K_RIGHT]:
+            self.attack_direction_x = self.projectile_speed
+
+        
+        
         self.rect.center = self.pos
 
-        self.move_to = vec(pg.mouse.get_pos()) 
-        self.move_vector = self.move_to - self.pos  
-        self.pos += self.move_vector.normalize() * self.speed  
-
-        self.animate()
-
-    def animate(self):
-        self.now = pg.time.get_ticks()
         
 
-        if self.dead:   
-            if self.now - self.last_update > 350:   
-                self.last_update = self.now
-                self.current_frame = (self.current_frame + 1) % len(self.dead_frames)
-                self.image = self.dead_frames[self.current_frame]
-                self.rect = self.image.get_rect()
+        
             
 enemy_img = pg.image.load("reaper.png")
 enemy_img = pg.transform.scale(enemy_img, (50,70))
+
+
+class Ranged_attack(pg.sprite.Sprite):
+    def __init__(self, game, x ,y, direction_x, direction_y):
+        self.groups = game.all_sprites, game.projectiles_grp 
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface([50,50])
+        self.image.fill((255,0,0))
+        self.rect = self.image.get_rect()
+        self.pos = vec(x, y) 
+        self.direction_x = direction_x
+        self.direction_y = direction_y
+        self.rect.center = self.pos 
+
 
 class Liveenemy(pg.sprite.Sprite):
     def __init__(self,game):
@@ -92,16 +107,6 @@ class Liveenemy(pg.sprite.Sprite):
         if self.pos.y < -100:
             self.kill()
 
-spiketrap_img = pg.image.load("Spike Trap 1 A.png")
-spiketrap_img = pg.transform.scale(spiketrap_img, (30,30))
-
-class Stilltrap(pg.sprite.Sprite):
-    def __init__(self):
-        pg.sprite.Sprite.__init__(self)
-        self.image = spiketrap_img
-        self.rect = self.image.get_rect()
-        self.pos = vec(randint(0,1000),randint(0,800))
-        self.rect.center = self.pos
 
 fireball_img = pg.image.load("Fireball_68x9 1.png")
 fireball_img = pg.transform.scale(fireball_img, (50,70))

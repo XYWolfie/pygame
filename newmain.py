@@ -9,10 +9,13 @@ class Game():
         self.PINK = (250,200,200)
         self.GREEN = 0,50,45
 
-        self.WIDTH = 1000
-        self.HEIGHT = 800
+        self.WIDTH = 2546
+        self.HEIGHT = 706
        
         self.screen = pg.display.set_mode((self.WIDTH,self.HEIGHT))
+
+        self.bg = pg.image.load("full bg.png").convert_alpha()
+        self.bg = pg.transform.scale(self.bg, (2546, 706))
 
         self.comic_sans30 = pg.font.SysFont("Comic Sans MS", 30)
 
@@ -31,7 +34,7 @@ class Game():
         self.food = pg.sprite.Group()
         self.all_liveenemies = pg.sprite.Group()
 
-        self.redhood = Player()
+        self.redhood = Player(self)
         self.redhood_group.add(self.redhood)
     
         self.grapesoda = Food()
@@ -44,7 +47,8 @@ class Game():
 
         self.run()
 
-    def run(self):             
+    def run(self):  
+        i = 0           
         playing = True
         while playing:
             self.clock.tick(self.FPS)
@@ -54,7 +58,15 @@ class Game():
 
             self.now =pg.time.get_ticks()
 
-            self.screen.fill(self.GREEN)
+
+            self.screen.fill((self.GREEN))
+            self.screen.blit(self.bg, (i,0))
+            self.screen.blit(self.bg,(self.WIDTH+i,0))
+            if (i == -self.WIDTH):
+                self.screen.blit(self.bg,(self.WIDTH+i,0))
+                i=0
+            i-=1
+
 
             self.hits = pg.sprite.spritecollide(self.redhood, self.all_enemies, False)
             if self.hits:
@@ -93,11 +105,7 @@ class Game():
                 self.all_traps.add(fireball)
                 self.all_enemies.add(fireball)
 
-            if len(self.all_stilltraps) < 10:
-                spiketrap = Stilltrap()
-                self.all_sprites.add(spiketrap)
-                self.all_stilltraps.add(spiketrap)
-                self.all_enemies.add(spiketrap)
+            
 
             
 
@@ -131,4 +139,4 @@ class Game():
         self.new()
             
 
-g = Game()
+g = Game() 
