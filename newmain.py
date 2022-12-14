@@ -9,13 +9,23 @@ class Game():
         self.PINK = (250,200,200)
         self.GREEN = 0,50,45
 
-        self.WIDTH = 2546
+        self.WIDTH = 1500
         self.HEIGHT = 706
        
         self.screen = pg.display.set_mode((self.WIDTH,self.HEIGHT))
 
         self.bg = pg.image.load("full bg.png").convert_alpha()
         self.bg = pg.transform.scale(self.bg, (2546, 706))
+        self.bg_WIDTH = self.bg.get_width()
+
+        self.ground = pg.image.load("long grass.png").convert_alpha()
+        self.ground = pg.transform.scale(self.ground, (1550, 147))
+
+        self.platform1 = pg.image.load("long platform1.png").convert_alpha()
+        self.platform1 = pg.transform.scale(self.platform1, (100, 195))
+
+        self.platform2 = pg.image.load("long platform1.png").convert_alpha()
+        self.platform2 = pg.transform.scale(self.platform2, (100, 311))
 
         self.comic_sans30 = pg.font.SysFont("Comic Sans MS", 30)
 
@@ -37,9 +47,7 @@ class Game():
         self.redhood = Player(self)
         self.redhood_group.add(self.redhood)
     
-        self.grapesoda = Food()
-        self.food.add(self.grapesoda)
-        self.all_sprites.add(self.redhood, self.grapesoda)
+        
     
         self.last_collision = 0
 
@@ -59,11 +67,11 @@ class Game():
             self.now =pg.time.get_ticks()
 
 
-            self.screen.fill((self.GREEN))
+            #self.screen.fill((self.GREEN))
             self.screen.blit(self.bg, (i,0))
-            self.screen.blit(self.bg,(self.WIDTH+i,0))
-            if (i == -self.WIDTH):
-                self.screen.blit(self.bg,(self.WIDTH+i,0))
+            self.screen.blit(self.bg,(self.bg_WIDTH+i,0))
+            if (i == -self.bg_WIDTH):
+                self.screen.blit(self.bg,(self.bg_WIDTH+i,0))
                 i=0
             i-=1
 
@@ -88,22 +96,7 @@ class Game():
             if self.hits:
                 self.redhood.hp +=100
 
-            if len(self.food) < 1:
-                grapesoda = Food()
-                self.all_sprites.add(grapesoda)
-                self.food.add(grapesoda)
-
-            if len(self.all_liveenemies) < 1:
-                reaper = Liveenemy(self)
-                self.all_sprites.add(reaper)
-                self.all_enemies.add(reaper)
-                self.all_liveenemies.add(reaper)
-
-            if len(self.all_traps) < 20:
-                fireball = Trap()
-                self.all_sprites.add(fireball)
-                self.all_traps.add(fireball)
-                self.all_enemies.add(fireball)
+            
 
             
 
@@ -111,6 +104,12 @@ class Game():
 
             self.screen.blit(self.text_font, (10, 10))
 
+            self.screen.blit(self.ground, (-20, 500))
+
+            self.screen.blit(self.platform1, (1300, 0))
+
+            self.screen.blit(self.platform2, (1000, 0))
+        
 
             self.all_sprites.update()
         
