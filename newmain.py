@@ -96,6 +96,8 @@ class Game():
             if self.hits:
                 self.redhood.hp +=100
 
+            print(self.redhood.hp)
+
             
 
             
