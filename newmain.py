@@ -41,6 +41,12 @@ class Game():
         self.FPS = 120
         self.clock = pg.time.Clock()
 
+        pg.mixer.music.load('LOFI.rar') 
+        pg.mixer.music.play(-1) 
+
+        LOFI = pg.mixer.Sound("LOFI.rar") 
+        LOFI.set_volume(0.5) 
+
         self.new()
 
     def new(self):
@@ -52,6 +58,10 @@ class Game():
         self.all_stilltraps = pg.sprite.Group()
         self.food = pg.sprite.Group()
         self.all_liveenemies = pg.sprite.Group()
+
+        #self.blocks = pg.sprite.Group()
+
+        #self.blocks.add(self.rock)
 
         self.redhood = Player(self)
         self.redhood_group.add(self.redhood)
@@ -101,10 +111,10 @@ class Game():
                         self.redhood.kill()
                         self.game_over_loop()
 
-            self.hits = pg.sprite.spritecollide(self.redhood, self.food, True)
-            if self.hits:
-                self.redhood.hp +=100
-
+            
+            #collision = pg.sprite.spritecollide(self.redhood, self.blocks, False)
+            #if collision:
+                #self.check_collision(collision[0])
           
             if len(self.all_traps) < 5:
                 fireball = Trap(self)
@@ -125,6 +135,8 @@ class Game():
             self.screen.blit(self.platform2, (800, 0))
             self.screen.blit(self.platform3, (600, 0))
             self.screen.blit(self.floatpiece, (1050, 230))
+
+            pg.mixer.Sound.play(self.LOFI)
             
         
 
@@ -133,6 +145,32 @@ class Game():
             self.all_sprites.draw(self.screen)
 
             pg.display.update()
+
+    #def check_collision(self, collided_block):
+        #offset = self.redhood.speed + 1
+        #top = collided_block.rect.bottom - self.redhood.rect.top
+        #bottom = collided_block.rect.top - self.redhood.rect.bottom
+ 
+        #if top < offset and top > -offset:
+            #self.redhood.rect.top = collided_block.rect.bottom + 1
+            #print("collision top")
+        #elif bottom > -offset and bottom < offset:
+            #self.redhood.rect.bottom = collided_block.rect.top -1
+            #print("collision bottom")
+        
+        #left = collided_block.rect.right - self.redhood.rect.left
+        #right = collided_block.rect.left - self.redhood.rect.right
+ 
+        #if left < offset and left > -offset:
+            #self.redhood.rect.left = collided_block.rect.right + 1
+            #print("collision left")
+        #elif right > -offset and right < offset:
+            #self.redhood.rect.right = collided_block.rect.left - 1
+            #print("collision right")
+ 
+        self.redhood.pos.x = self.redhood.rect.centerx
+        self.redhood.pos.y = self.redhood.rect.centery
+    
 
     def game_over_loop(self):
 
