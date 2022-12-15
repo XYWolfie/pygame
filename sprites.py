@@ -70,6 +70,12 @@ class Player(pg.sprite.Sprite):
 
         self.running = False
         self.left = True
+        self.jumping = False
+        self.jump = pg.time.get_ticks()
+        self.jump_start = 0
+        self.last_jump = 0
+        self.falling = False
+
 
         self.projectile_speed = 5
         self.running_frames = running_frames
@@ -84,16 +90,17 @@ class Player(pg.sprite.Sprite):
         self.rect.center = self.pos
         self.standing = True
         self.running = False
-        self.jumping = False
+        now = pg.time.get_ticks()
 
         
         
         keys =pg.key.get_pressed()
         if keys[pg.K_w]:
-            self.pos.y += 5
+            #self.pos.y += 5
             self.pos.y -= self.speed
             self.running = False
             self.jumping = True
+            self.jump_start = 0
         if keys[pg.K_s]:
             self.pos.y += self.speed
             self.running = True
@@ -108,8 +115,32 @@ class Player(pg.sprite.Sprite):
             self.running = True
             self.left = True
 
+        if self.jumping:
+            self.pos.y -= 5
+            #self.pos.y -= self.speed
+            #self.pos.y -= 5
+            #self.jump_start += 1
+
         else:
-            self.standing_frames = True
+            self.pos.y += 5
+
+        if self.pos.y > 200:
+            self.jumping = False
+            self.falling = True
+
+        if self.falling == True:
+            self.pos.y += 5
+
+
+        
+
+
+        if self.jump_start > 20:
+            self.jumping = False
+
+        #if self.jumped:
+            #if self.last_jump < self.game.now -2000:
+                
 
         self.attack_direction_x, self.attack_direction_y = 0, 0
 
@@ -134,6 +165,8 @@ class Player(pg.sprite.Sprite):
             self.pos.y = 0
         if self.pos.y > 500:
             self.pos.y = 500
+       
+        
       
         self.rect.center = self.pos
 
@@ -169,21 +202,18 @@ class Ranged_attack(pg.sprite.Sprite):
         self.rect.center = self.pos 
             
 
+fireball_img = pg.image.load("Fireball_68x9 1.png")
+fireball_img = pg.transform.scale(fireball_img, (50,70))
 
-
-
-
-
-
-    def update(self):
+class Trap(pg.sprite.Sprite):
+    def __init__(self, game):
+        pg.sprite.Sprite.__init__(self)
+        self.image = fireball_img
+        self.rect = self.image.get_rect()
+        self.pos = vec(randint(1600,1800),randint(0,500))
         self.rect.center = self.pos
-        self.pos.x += self.direction_x
-        self.pos.y += self.direction_y
+        self.speed = 5
 
-        self.pos.y -= self.speed
-
-        if self.pos.y < -100:
-            self.kill()
 
 
 
@@ -194,16 +224,5 @@ class Ranged_attack(pg.sprite.Sprite):
         self.pos.x -= self.speed
 
         if self.pos.x < -100:
-            self.pos.x = 950
-            self.pos.y = randint(0,900)
-
-
-
-    def update(self):
-        self.rect.center = self.pos
-
-        self.pos.x -= self.speed
-
-        if self.pos.x < -100:
-            self.pos.x = 950
-            self.pos.y = randint(0,900)
+            self.pos.x = randint(1500, 1800)
+            self.pos.y = randint(0,500)

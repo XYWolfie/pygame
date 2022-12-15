@@ -27,6 +27,15 @@ class Game():
         self.platform2 = pg.image.load("long platform2.png").convert_alpha()
         self.platform2 = pg.transform.scale(self.platform2, (100, 411))
 
+        self.platform3 = pg.image.load("long platform3.png").convert_alpha()
+        self.platform3 = pg.transform.scale(self.platform3, (100, 333))
+
+        self.floatpiece = pg.image.load("floating piece.png").convert_alpha()
+        self.floatpiece = pg.transform.scale(self.floatpiece, (150, 163))
+
+        self.rock = pg.image.load("rock.png").convert_alpha()
+        self.rock = pg.transform.scale(self.rock, (200, 87))
+
         self.comic_sans30 = pg.font.SysFont("Comic Sans MS", 30)
 
         self.FPS = 120
@@ -96,7 +105,12 @@ class Game():
             if self.hits:
                 self.redhood.hp +=100
 
-            print(self.redhood.hp)
+          
+            if len(self.all_traps) < 5:
+                fireball = Trap(self)
+                self.all_sprites.add(fireball)
+                self.all_traps.add(fireball)
+                self.all_enemies.add(fireball)
 
             
 
@@ -105,12 +119,13 @@ class Game():
             
 
             self.screen.blit(self.text_font, (10, 10))
-
+            self.screen.blit(self.rock, (350, 450))
             self.screen.blit(self.ground, (-20, 500))
-
             self.screen.blit(self.platform1, (1300, 0))
-
-            self.screen.blit(self.platform2, (1000, 0))
+            self.screen.blit(self.platform2, (800, 0))
+            self.screen.blit(self.platform3, (600, 0))
+            self.screen.blit(self.floatpiece, (1050, 230))
+            
         
 
             self.all_sprites.update()
