@@ -87,8 +87,7 @@ class Player(pg.sprite.Sprite):
         self.jumping = False
 
         
-        if self.pos.y > 400:
-            self.pos.y -= 100
+        
         keys =pg.key.get_pressed()
         if keys[pg.K_w]:
             self.pos.y += 5

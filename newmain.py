@@ -24,8 +24,8 @@ class Game():
         self.platform1 = pg.image.load("long platform1.png").convert_alpha()
         self.platform1 = pg.transform.scale(self.platform1, (100, 195))
 
-        self.platform2 = pg.image.load("long platform1.png").convert_alpha()
-        self.platform2 = pg.transform.scale(self.platform2, (100, 311))
+        self.platform2 = pg.image.load("long platform2.png").convert_alpha()
+        self.platform2 = pg.transform.scale(self.platform2, (100, 411))
 
         self.comic_sans30 = pg.font.SysFont("Comic Sans MS", 30)
 
